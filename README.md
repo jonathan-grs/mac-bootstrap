@@ -3,7 +3,7 @@
 Paste this command into a fresh macOS terminal:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/jonathan-grs/mac-bootstrap/main/bootstrap.sh | /bin/sh
+curl -fsSL https://raw.githubusercontent.com/jonathan-grs/mac-bootstrap/main/bootstrap.sh | /bin/bash
 ````
 
 ### What this does
