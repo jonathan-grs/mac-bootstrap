@@ -42,16 +42,64 @@ clone_or_update_yadm_repo() {
 
 wait_for_mas_login() {
   # mas is now guaranteed to be installed
-  if mas account >/dev/null 2>&1; then
-    log "App Store already signed in ✅"
-    return
+  # Strategy: (1) prefer `mas account` when supported, (2) inspect common
+  # App Store preference domains for account-like keys (works when mas or
+  # its subcommands are unavailable), (3) interactive fallback: open App
+  # Store and poll until sign-in is detected or user confirms.
+
+  # 1) Try `mas account` if available
+  if command -v mas >/dev/null 2>&1 && mas help 2>&1 | grep -qi "account"; then
+    if mas account >/dev/null 2>&1; then
+      log "App Store already signed in ✅"
+      return
+    fi
   fi
+
+  # 2) Inspect common preference domains for the App Store / storeagent
+  # which may contain account metadata on some macOS versions. This is a
+  # best-effort check and may vary by OS version.
+  for domain in com.apple.storeagent com.apple.storeaccount com.apple.appstore; do
+    if defaults read "$domain" >/dev/null 2>&1; then
+      if defaults read "$domain" 2>/dev/null | tr '[:upper:]' '[:lower:]' | grep -qE 'account|appleid|apple_id|dsid|userid'; then
+        log "Detected App Store account in $domain ✅"
+        return
+      fi
+    fi
+  done
+
+  # 3) Fallback: open App Store and poll for sign-in using the methods above.
   log "Opening App Store — please sign in (2FA if needed)…"
   open -a "App Store" || true
-  until mas account >/dev/null 2>&1; do
-    sleep 5
+  while true; do
+    # Re-check mas account if possible
+    if command -v mas >/dev/null 2>&1 && mas help 2>&1 | grep -qi "account" && mas account >/dev/null 2>&1; then
+      log "App Store sign-in detected via 'mas account' ✅"
+      break
+    fi
+    # Re-check preference domains
+    signed_in=false
+    for domain in com.apple.storeagent com.apple.storeaccount com.apple.appstore; do
+      if defaults read "$domain" >/dev/null 2>&1; then
+        if defaults read "$domain" 2>/dev/null | tr '[:upper:]' '[:lower:]' | grep -qE 'account|appleid|apple_id|dsid|userid'; then
+          log "Detected App Store account in $domain ✅"
+          signed_in=true
+          break
+        fi
+      fi
+    done
+    if [ "$signed_in" = true ]; then
+      break
+    fi
+    # As a last resort, prompt the user to confirm they signed in and press Enter
+    # (useful in CI-like interactive runs).
+    echo
+    log "If you've signed into the App Store, press Enter to continue; otherwise wait and App Store will be polled every 5s."
+    # Read with timeout: wait 5 seconds for input, otherwise continue looping
+    if read -t 5 -r _; then
+      log "User confirmed sign-in — continuing ✅"
+      break
+    fi
   done
-  log "App Store sign-in detected ✅"
 }
 
 run_yadm_bootstrap() {
