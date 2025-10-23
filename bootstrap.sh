@@ -18,6 +18,6 @@ gh auth status >/dev/null 2>&1 || gh auth login -p https -w
 
 echo "[bootstrap] Cloning private dotfiles via HTTPS token & bootstrapping…"
 # Use HTTPS; gh’s credential helper injects your token automatically
-yadm clone --bootstrap https://github.com/<YOU>/<PRIVATE_DOTFILES>.git
+yadm clone --bootstrap https://github.com/jonathan-grs/dotfiles.git
 
 echo "[bootstrap] Done."
