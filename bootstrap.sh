@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-EXPECTED_REMOTE="https://github.com/jonathan_grs/dotfiles.git"
+EXPECTED_REMOTE="https://github.com/jonathan-grs/dotfiles.git"
 
 log() { printf "\e[1;36m[bootstrap]\e[0m %s\n" "$*"; }
 
