@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-EXPECTED_REMOTE="https://github.com/<YOU>/<PRIVATE_DOTFILES>.git"
+EXPECTED_REMOTE="https://github.com/jonathan_grs/dotfiles.git"
 
 log() { printf "\e[1;36m[bootstrap]\e[0m %s\n" "$*"; }
 
@@ -66,13 +66,19 @@ run_yadm_bootstrap() {
   log "All done 🎉"
 }
 
+run_brew_bundle() {
+  log "Installing software via Homebrew (this may take a while)…"
+  brew bundle --file="$(git rev-parse --show-toplevel)/Brewfile" --cleanup
+}
+
 main() {
   ensure_xcode
   ensure_homebrew
   ensure_tools      # <— installs mas
   clone_or_update_yadm_repo
   wait_for_mas_login
-  run_yadm_bootstrap
+  # run_yadm_bootstrap
+  run_brew_bundle
 }
 
 main "$@"
