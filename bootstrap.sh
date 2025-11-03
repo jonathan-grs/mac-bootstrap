@@ -88,7 +88,7 @@ run_yadm_bootstrap() {
 
 run_brew_bundle() {
   log "Installing software via Homebrew (this may take a while)…"
-  brew bundle --file="$(git rev-parse --show-toplevel)/Brewfile" --cleanup
+  curl -fsSL https://raw.githubusercontent.com/jonathan-grs/mac-bootstrap/main/Brewfile| brew bundle --file=- --cleanup
 }
 
 main() {
