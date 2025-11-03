@@ -28,15 +28,35 @@ ensure_tools() {
     log "GitHub device login (browser will open)…"
     gh auth login -p https -w
   fi
+
+  # Ensure git uses gh as a credential helper so HTTPS clones (used by yadm)
+  # won't prompt for username/password after a successful `gh auth login`.
+  # This sets git's credential.helper to run `gh auth git-credential` which
+  # returns credentials for GitHub-hosted HTTPS repos.
+  current_cred_helper=$(git config --global credential.helper || true)
+  if [[ "$current_cred_helper" != *"gh auth git-credential"* ]]; then
+    log "Configuring git to use GitHub CLI as credential helper for HTTPS clones…"
+    # Use the gh binary as the helper. The leading '!' tells git to treat the
+    # helper as a shell command to execute.
+    git config --global credential.helper "!$(command -v gh) auth git-credential" || true
+  fi
 }
 
 clone_or_update_yadm_repo() {
   if yadm rev-parse --git-dir >/dev/null 2>&1; then
     log "yadm repo exists; pulling latest…"
+    # Ensure credential helper is configured for existing repo
+    yadm config credential.helper '!gh auth git-credential' || true
     yadm pull --rebase --autostash || yadm pull || true
   else
-    log "Cloning dotfiles (no bootstrap yet)…"
+    log "Cloning dotfiles…"
+    # Use gh auth for the clone operation itself
+    GIT_CONFIG_COUNT=1 \
+    GIT_CONFIG_KEY_0="credential.helper" \
+    GIT_CONFIG_VALUE_0="!gh auth git-credential" \
     yadm clone "$EXPECTED_REMOTE"
+    # Persist the credential helper config in the newly cloned repo
+    yadm config credential.helper '!gh auth git-credential' || true
   fi
 }
 
