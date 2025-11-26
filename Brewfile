@@ -1,3 +1,6 @@
+tap "danielgatis/imgcat"
+# Run your GitHub Actions locally
+brew "act"
 # Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
 # Programmable completion for Bash 4.2+
@@ -8,10 +11,14 @@ brew "bat"
 brew "bottom"
 # Resource monitor. C++ version and continuation of bashtop and bpytop
 brew "btop"
+# Insanely fast image printing in your terminal
+brew "catimg"
 # Linux virtual machines
 brew "lima"
 # Container runtimes on MacOS (and Linux) with minimal setup
 brew "colima"
+# Bash, Zsh and Fish completion for Docker
+brew "docker-completion"
 # Pack, ship and run any application as a lightweight container
 brew "docker"
 # Isolated development environments using Docker
@@ -26,10 +33,14 @@ brew "fastfetch"
 brew "fd"
 # Play, record, convert, and stream audio and video
 brew "ffmpeg"
+# User-friendly command-line shell for UNIX-like operating systems
+brew "fish"
 # Terminal JSON viewer
 brew "fx"
 # Command-line fuzzy finder written in Go
 brew "fzf"
+# Disk usage analyzer with console interface written in Go
+brew "gdu"
 # GitHub command-line tool
 brew "gh"
 # Distributed revision control system
@@ -38,12 +49,20 @@ brew "git"
 brew "git-delta"
 # Blazing fast terminal-ui for git written in rust
 brew "gitui"
+# Open source programming language to build simple/reliable/efficient software
+brew "go"
+# Fast linters runner for Go
+brew "golangci-lint"
+# Golang security checker
+brew "gosec"
 # Improved top (interactive process viewer)
 brew "htop"
 # Tools and libraries to manipulate images in many formats
 brew "imagemagick"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
+# Handy way to save and run project-specific commands
+brew "just"
 # Kubernetes command-line interface
 brew "kubernetes-cli"
 # Lazier way to manage everything docker
@@ -64,6 +83,8 @@ brew "node"
 brew "python@3.14"
 # Execute binaries from Python packages in isolated environments
 brew "pipx"
+# Fast, disk space efficient package manager
+brew "pnpm"
 # Python package management tool
 brew "poetry"
 # PDF rendering library (based on the xpdf-3.0 code base)
@@ -76,6 +97,8 @@ brew "resvg"
 brew "ripgrep"
 # Powerful, clean, object-oriented scripting language
 brew "ruby"
+# Rust toolchain installer
+brew "rustup"
 # 7-Zip is a file archiver with a high compression ratio
 brew "sevenzip"
 # Static analysis and lint tool, for (ba)sh scripts
@@ -104,10 +127,14 @@ brew "zsh-autosuggestions"
 brew "zsh-completions"
 # Fish shell like syntax highlighting for zsh
 brew "zsh-syntax-highlighting"
+# Display images and gifs in your terminal
+brew "danielgatis/imgcat/imgcat"
 # Allows switching between application windows
 cask "contexts"
 # Plain-text editor for web pages, program source codes and more
 cask "coteditor"
+# Web browser
+cask "firefox"
 cask "font-meslo-lg-nerd-font"
 cask "font-symbols-only-nerd-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
@@ -118,6 +145,8 @@ cask "google-drive"
 cask "iterm2"
 # Password manager app
 cask "keepassxc"
+# Utility that shows the latest app updates
+cask "latest"
 # Cloud storage client
 cask "onedrive"
 # Podcast platform
